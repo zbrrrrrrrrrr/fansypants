@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALA Fanual Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm certification exam, focused and clean
+   IDEA: a fan spec card / exam answer sheet; a ceiling fan whose blades fill as you progress
+   PICTURE: the live question card itself, with a fan progress dial
+   COLOUR and TYPE: deep green ground, white card, vermilion only for wrong answers, lime for right; Sofia Sans Condensed + Instrument Sans
+   LAYOUT: header with dial, question card, navigator grid; results screen with module scores and critique list */
+:root{color-scheme:light dark;--bg:light-dark(#f4f6f3,#0d1714);--card:light-dark(#fff,#15221e);--ink:light-dark(#0f1d19,#e9f1ed);--mute:light-dark(#5b6b65,#9db0a8);--line:light-dark(#dfe6e2,#26352f);--deep:#00463c;--lime:#e6f5c8;--ok:light-dark(#1f7a4d,#7fd8a5);--okbg:light-dark(#e7f6ec,#163126);--bad:#ff6f59;--badbg:light-dark(#fff0ec,#3a1d17);--flag:light-dark(#b7791f,#f0c060)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Instrument Sans",system-ui,sans-serif;overflow-x:clip}
+h1,h2,.big{font-family:"Sofia Sans Condensed","Arial Narrow",sans-serif;font-weight:800;line-height:1.05;text-wrap:balance;margin:0}
+header{background:var(--deep);color:#fff;padding:20px max(5vw,16px) 64px}
+.hwrap{max-width:860px;margin:0 auto;display:flex;gap:20px;align-items:center;justify-content:space-between}
+h1{font-size:clamp(30px,5vw,44px)}
+header p{margin:6px 0 0;color:var(--lime);font-size:15px}
+.dial{flex:none;width:92px;height:92px}
+.dial .bl{fill:rgba(255,255,255,.14);transition:fill .3s}
+.dial .bl.on{fill:var(--lime)}
+.dial text{fill:#fff;font:800 18px "Sofia Sans Condensed",sans-serif}
+main{max-width:860px;margin:-44px auto 40px;padding:0 max(3vw,12px)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,4vw,32px);box-shadow:0 10px 30px rgba(0,40,30,.12)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:14px;color:var(--mute)}
+.mod{font-weight:600;color:var(--ink)}
+.q{font-size:clamp(19px,2.6vw,23px);font-weight:600;line-height:1.35;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:52px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--deep)}
+.opt:focus-visible,button:focus-visible,textarea:focus-visible,.fld input:focus-visible{outline:3px solid #5fb89a;outline-offset:2px}
+.opt .l{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:14px;background:var(--bg);border:1px solid var(--line)}
+.opt.sel{border-color:var(--deep);background:light-dark(#eef5f2,#1b2c27)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.ok .l{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}.opt.bad .l{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;font-weight:600;min-height:1.5em}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+button.b{font:600 15px "Instrument Sans",sans-serif;border-radius:10px;min-height:44px;padding:0 18px;cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+button.p{background:var(--deep);border-color:var(--deep);color:#fff}
+button.fl.on{border-color:var(--flag);color:var(--flag)}
+.sp{flex:1}
+textarea{width:100%;font:16px "Instrument Sans",sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:12px;min-height:70px;resize:vertical;display:none}
+textarea.show{display:block}
+.nav{margin-top:18px}
+.nav h2{font-size:20px;margin-bottom:8px}
+.grid{display:flex;flex-wrap:wrap;gap:6px}
+.grid button{width:40px;height:40px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 13px "Instrument Sans",sans-serif;cursor:pointer;position:relative}
+.grid button.cur{border-color:var(--deep);box-shadow:0 0 0 2px var(--deep) inset}
+.grid button.ok{background:var(--okbg);border-color:var(--ok)}
+.grid button.bad{background:var(--badbg);border-color:var(--bad)}
+.grid button.ans{background:light-dark(#eef5f2,#1b2c27)}
+.grid button.f::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--flag)}
+.grp{font-size:13px;color:var(--mute);margin:10px 0 6px;width:100%}
+.mode{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mute)}
+.mode input{width:20px;height:20px;accent-color:var(--deep)}
+.big{font-size:clamp(48px,10vw,80px);color:var(--deep)}
+:root[data-theme=dark] .big{color:var(--lime)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .big{color:var(--lime)}}
+.rows{display:grid;gap:10px;margin:18px 0}
+.row{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr) auto;gap:12px;align-items:center;font-size:15px}
+.track{height:12px;border-radius:6px;background:var(--line);overflow:hidden}.track i{display:block;height:100%;background:var(--ok)}
+.row b{white-space:nowrap;text-align:right}
+.rv{border-top:1px solid var(--line);padding:14px 0}
+.rv .tag{font-size:13px;font-weight:600;margin-right:8px}
+.rv .t{font-weight:600;margin:4px 0}
+.rv .a{font-size:15px;color:var(--mute)}
+.rv .n{font-size:15px;border-left:3px solid var(--flag);padding-left:10px;margin-top:6px}
+.hide{display:none}
+.fld{display:block;font-weight:600;font-size:15px;margin-top:14px}
+.fld input{display:block;width:100%;font:16px "Instrument Sans",sans-serif;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:6px;min-height:46px}
+#who h2{font-size:28px;margin-bottom:6px}#who p{margin:0}
+.small{font-size:13px;color:var(--mute)}
+@media(max-width:600px){header{padding-bottom:56px}.dial{width:72px;height:72px}.row{grid-template-columns:minmax(0,1fr) auto}.row .track{grid-column:1/-1;order:3}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="hwrap"><div><h1>ALA Fanual practice test</h1><p>Chapters 2–5 · 41 questions · multiple choice</p></div><svg class="dial" id="dial" viewBox="-50 -50 100 100" aria-hidden="true"></svg></div></header>
+<main>
+<section class="card" id="quiz">
+  <div class="bar"><span><span class="mod" id="mod"></span> · <span id="pos"></span></span>
+    <label class="mode"><input type="checkbox" id="instant" checked> Show answer right away</label></div>
+  <p class="q" id="qt"></p>
+  <div class="opts" id="opts" role="radiogroup"></div>
+  <div class="fb" id="fb" aria-live="polite"></div>
+  <textarea id="note" placeholder="Critique note for this question (wording, answer key, distractors?)"></textarea>
+  <div class="tools">
+    <button class="b" id="prev">Back</button>
+    <button class="b fl" id="flag">Flag for critique</button>
+    <span class="sp"></span>
+    <button class="b p" id="next">Next</button>
+  </div>
+  <div class="nav"><h2>Questions</h2><div class="grid" id="grid"></div>
+  <div class="tools"><button class="b" id="finish">Finish &amp; see results</button><button class="b" id="reset">Start over</button></div></div>
+</section>
+
+<section class="card hide" id="who">
+  <div class="bar"><span class="mod">Almost done</span></div>
+  <h2>Who took this test?</h2>
+  <p>Enter your name and email to see your results. Your name, email and score are sent to the test administrator.</p>
+  <form name="test-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="wf">
+    <input type="hidden" name="form-name" value="test-results">
+    <input type="hidden" name="subject" value="ALA Fanual practice test result (%{submissionId})">
+    <p class="hide"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <label class="fld">Full name <input type="text" name="name" id="wn" required maxlength="100" autocomplete="name"></label>
+    <label class="fld">Email <input type="email" name="email" id="we" required maxlength="200" autocomplete="email"></label>
+    <input type="hidden" name="score"><input type="hidden" name="modules"><input type="hidden" name="missed"><input type="hidden" name="notes">
+    <div class="tools"><button type="button" class="b" id="wback">Back to questions</button><span class="sp"></span><button type="submit" class="b p" id="wsub">See my results</button></div>
+    <p class="small" id="wmsg" aria-live="polite"></p>
+  </form>
+</section>
+
+<section class="card hide" id="res">
+  <div class="bar"><span class="mod">Results</span></div>
+  <div class="big" id="score"></div>
+  <p id="sline" style="margin:6px 0 0"></p>
+  <p class="small" id="rmsg" aria-live="polite"></p>
+  <div class="rows" id="mods"></div>
+  <div class="tools"><button class="b p" id="back">Back to questions</button><button class="b" id="copy">Copy critique list</button><button class="b" id="again">Retake</button></div>
+  <p class="small" id="cmsg"></p>
+  <h2 style="font-size:24px;margin-top:18px">Missed &amp; flagged</h2>
+  <div id="review"></div>
+</section>
+<p class="small" style="text-align:center">Questions and answer key exactly as written in the submitted exam document.</p>
+</main>
+<script>
+{
+const S=[
+["Chapters 2–3",[
+["A customer with an 8-foot ceiling and a 4° slope wants maximum clearance. What is the BEST recommendation?",["Use a hugger fan because the slope falls within normal construction tolerances.","Use the shortest compatible downrod fan because flush mounts cannot self-level.","Use a hugger fan with balancing weights.","Use a standard 12-inch downrod to improve geometry."],1],
+["A customer has a 28° cathedral ceiling. Which guidance is BEST?",["Verify manufacturer-approved slope hardware for the model.","Any ball-and-socket fan should work.","Increase downrod length until the fan hangs level.","Recommend only fans labeled specifically for vaulted ceilings."],0],
+["Which installation most strongly supports a coastal-rated fan?",["Covered patio in Arizona.","Screened porch in Texas.","Screened lanai in Miami.","Pergola exposed to rain."],2],
+["Which characteristic most strongly suggests DC motor technology?",["Five blades and a large blade span.","Remote or smart controls with six or more speeds.","Integrated lighting and matte black finish.","Wet-location certification."],1],
+["Why might a 38-inch fan feel stronger directly below than a 84-inch fan?",["The smaller fan likely has a steeper blade pitch.","The larger fan sacrifices airflow for efficiency.","Smaller fans typically operate at much higher RPM.","Airflow concentration affects perceived velocity more than total airflow."],3],
+["Which is the strongest indicator of premium construction?",["Die-cast housing, finish-matched hardware, and multiple fasteners per blade.","Integrated LED lighting and smart controls.","ABS blades and wet rating.","Large diameter with a DC motor."],0],
+["A replacement blade from an identical model creates wobble. Why?",["The replacement was installed in the wrong position.","Manufacturing tolerances can create imbalance between otherwise identical blades.","The motor adapted to the original blade set.","The blade arm requires recalibration."],1],
+["A fan develops wobble shortly after installation. Inspection reveals that the clevis pin has started migrating out of the motor yoke assembly. Which component was MOST likely omitted or installed incorrectly?",["The hanger ball set screws","The cotter pin securing the clevis pin","The safety cable attachment","The canopy retaining screws"],1],
+["What is the primary role of the set screws in the hanger ball assembly?",["Support the motor weight.","Provide grounding continuity.","Eliminate slack and movement in the assembly.","Prevent canopy vibration."],2],
+["Which statement best describes the safety cable?",["It supplements airflow stability.","It shares load with the bracket.","It is required only on sloped ceilings.","It provides independent secondary support."],3],
+["A customer specifically prioritizes long-term repairability and the ability to replace individual components rather than assemblies. Which recommendation BEST aligns with that goal?",["Legacy/component architecture with accessible switch housing components","Integrated architecture with canopy-mounted electronics","Bladeless architecture due to reduced moving parts","Dual-motor architecture because components are duplicated"],0],
+["A customer prefers a sleek direct-mount blade design but asks about long-term ownership considerations. Which tradeoff is MOST important to explain?",["Direct-mount systems are generally less aerodynamically efficient","Replacement blades are often manufacturer-specific and may be harder to source years later","Direct-mount systems place greater loads on motor bearings","Additional attachment hardware increases maintenance requirements"],1],
+["A customer wants future light-kit flexibility. Which is best?",["Integrated LED architecture.","Dual motor architecture.","Legacy architecture with fitter threading.","DC motor architecture."],2],
+["Why are standard lighting boxes unsuitable for ceiling fans?",["They cannot support dynamic loads and vibration.","They lack proper grounding.","They use different screw spacing.","They are limited to 35 pounds static load."],0],
+["Which recommendation best fits a 420 sq ft open-concept room?",["44-inch fan.","52-inch fan.","60–72-inch residential fan.","Commercial HVLS fan."],2],
+["Which style best fits 'not too modern, not too traditional'?",["Contemporary.","Transitional.","Traditional.","Tropical."],1],
+["Which statement about environmental ratings is most accurate?",["Wet-rated fans may be used in dry or damp locations.","Damp-rated fans are prohibited indoors.","Coastal ratings are identical to wet ratings.","Dry-rated fans are acceptable under covered patios."],0],
+["A customer with a covered coastal outdoor kitchen asks for a damp-rated fan because it will stay dry. Best answer?",["Damp-rated is sufficient if rainfall is unlikely.","Coastal-rated is preferred because corrosion risk exceeds moisture concerns.","Wet-rated is required but coastal protection is unnecessary.","Dry-rated fans perform adequately under roofs."],1],
+["A customer asks whether they can reuse the mounting bracket from their previous ceiling fan when installing a new fan from a different manufacturer. What is the BEST response?",["Most mounting brackets are standardized and interchangeable between manufacturers","Mounting brackets are generally manufacturer-specific","Reusing the bracket is acceptable if the fan weighs less than 35 pounds","Compatibility depends primarily on downrod diameter"],1],
+["Which answer best describes compact fan performance?",["Compact fans generally produce higher CFM than larger fans.","They create concentrated airflow despite lower total airflow volume.","They rely primarily on higher blade pitch.","They require DC motors to perform adequately."],1]
+]],
+["Module 4",[
+["Which is the most common motor found in original ceiling fan models?",["AC","DC","AC/DC"],0],
+["What is the average efficiency advantage of DC vs. AC motors?",["20%","50%","70%","90%"],2],
+["Where is the remote-control receiver installed on a pull-chain fan?",["Switch housing","Canopy","Motor Housing"],1],
+["Which type of fan motor is used in Smart Fans?",["AC","DC","AC/DC","LED"],1],
+["What measurement is used to determine the total airflow created by a ceiling fan?",["RPM","CFM","Blade pitch","Watts"],1],
+["What is the average CFM of a standard 52″ ceiling fan?",["3,000","5,000","7,000","10,000"],1],
+["How is efficiency calculated for ceiling fans?",["Wattage","CRI","CFM","CFM per Watt"],3],
+["Looking up from below a ceiling fan, what direction should it spin during summer?",["Clockwise","Counter-clockwise","Forward","Reverse"],1],
+["What fan speed is best for winter heat-reclamation?",["Maximum High","High","Medium","Low"],3],
+["Where is the reverse switch found on a DC motor fan?",["Switch housing","Pull-chain","Remote Control","Motor housing"],2],
+["Where is the reverse switch found on an AC motor fan?",["Switch housing","Pull-chain","Remote Control","Motor housing"],2]
+]],
+["Module 5",[
+["# of wires are required for a ceiling fan with light on a direct-wired wall control?",["One","Two","Three","Four"],2],
+["How is a Remote Wall Control powered?",["Battery","2-wire","Either battery or 2-wire","Electricity"],2],
+["Most popular control for residential ceiling fans?",["Remote Control","Wall Control","Smart Control","Pull-chain"],0],
+["What components can be replaced to address remote control issues?",["Transmitter","Wall Control","Receiver","ALL"],3],
+["Can fans be set up in the same installation on different remote frequencies?",["Yes","No"],0],
+["Can multiple fans be set up on the same frequency?",["Yes","No"],0],
+["What lamping is used for integrated ceiling fan lighting?",["CFL","Incandescent","LED","Edison"],2],
+["Most popular CRI for residential lighting?",["3,000","4,000","5,000","6,000"],0],
+["What climate rating is best suited for a ceiling fan on a covered or sheltered patio?",["Dry","Damp","Wet","Coastal"],1],
+["Are ceiling fans light-kit adaptable?",["Yes","No","Some","All"],2]
+]]];
+const Q=[];S.forEach(([m,qs])=>qs.forEach((q,i)=>Q.push({m,n:i+1,t:q[0],o:q[1],a:q[2]})));
+const L="ABCD",$=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let st={cur:0,ans:{},flag:{},note:{},instant:true};
+try{const s=JSON.parse(localStorage.getItem("ala-quiz")||"null");if(s&&s.ans)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem("ala-quiz",JSON.stringify(st))}catch(e){}};
+const dial=$("dial");
+dial.innerHTML=Array.from({length:12},(_,i)=>`<path class="bl" data-i="${i}" transform="rotate(${i*30})" d="M0,-12 C8,-20 6,-42 0,-46 C-6,-42 -8,-20 0,-12Z"/>`).join("")+`<circle r="12" fill="#00463c" stroke="#e6f5c8" stroke-width="2"/><text text-anchor="middle" dy="6" id="dn"></text>`;
+function drawDial(){const n=Object.keys(st.ans).length,on=Math.round(n/Q.length*12);dial.querySelectorAll(".bl").forEach(b=>b.classList.toggle("on",+b.dataset.i<on));$("dn").textContent=n}
+function render(){
+  const q=Q[st.cur],a=st.ans[st.cur],shown=a!==undefined&&st.instant;
+  $("mod").textContent=q.m;$("pos").textContent=`Question ${q.n} of ${S.find(s=>s[0]===q.m)[1].length} · ${st.cur+1}/${Q.length} overall`;
+  $("qt").textContent=q.n+". "+q.t;
+  $("opts").innerHTML=q.o.map((o,i)=>{let c="opt";if(shown){if(i===q.a)c+=" ok";else if(i===a)c+=" bad"}else if(i===a)c+=" sel";
+    return `<button class="${c}" role="radio" aria-checked="${i===a}" data-i="${i}" ${shown?"disabled":""}><span class="l">${L[i]}</span><span>${esc(o)}</span></button>`}).join("");
+  const fb=$("fb");fb.className="fb";fb.textContent="";
+  if(shown){if(a===q.a){fb.className="fb ok";fb.textContent="Correct."}else{fb.className="fb bad";fb.textContent=`Not quite — the key says ${L[q.a]}. ${q.o[q.a]}`}}
+  $("flag").classList.toggle("on",!!st.flag[st.cur]);$("flag").textContent=st.flag[st.cur]?"Flagged":"Flag for critique";
+  const nt=$("note");nt.classList.toggle("show",!!st.flag[st.cur]);nt.value=st.note[st.cur]||"";
+  $("prev").disabled=st.cur===0;$("next").textContent=st.cur===Q.length-1?"Finish":"Next";
+  $("instant").checked=st.instant;
+  let g="",last="";Q.forEach((x,i)=>{if(x.m!==last){g+=`<div class="grp">${esc(x.m)}</div>`;last=x.m}
+    const an=st.ans[i];let c=i===st.cur?"cur ":"";if(an!==undefined)c+=st.instant?(an===x.a?"ok":"bad"):"ans";if(st.flag[i])c+=" f";
+    g+=`<button class="${c}" data-j="${i}" aria-label="${esc(x.m)} question ${x.n}">${x.n}</button>`});
+  $("grid").innerHTML=g;drawDial();save();
+}
+const sig=()=>JSON.stringify(Q.map((q,i)=>st.ans[i]===undefined?-1:st.ans[i]));
+function finish(){
+  if(!Object.keys(st.ans).length||st.sent===sig()){results();return}
+  $("quiz").classList.add("hide");$("res").classList.add("hide");$("who").classList.remove("hide");
+  if(st.who){$("wn").value=st.who.name;$("we").value=st.who.email}
+  $("wmsg").textContent="";window.scrollTo(0,0);$("wn").focus();
+}
+$("wback").onclick=()=>{$("who").classList.add("hide");$("quiz").classList.remove("hide");render()};
+$("wf").addEventListener("submit",async e=>{e.preventDefault();
+  const f=e.target,name=$("wn").value.trim(),email=$("we").value.trim();
+  if(!name||!email){$("wmsg").textContent="Please enter both your name and your email.";return}
+  $("wn").value=name;$("we").value=email;st.who={name,email};
+  const right=Q.filter((q,i)=>st.ans[i]===q.a).length;
+  f.elements.score.value=`${right}/${Q.length} (${Math.round(right/Q.length*100)}%), ${Object.keys(st.ans).length} answered`;
+  f.elements.modules.value=S.map(([m])=>{const ix=Q.map((q,i)=>i).filter(i=>Q[i].m===m);return `${m}: ${ix.filter(i=>st.ans[i]===Q[i].a).length}/${ix.length}`}).join("; ");
+  f.elements.missed.value=Q.map((q,i)=>st.ans[i]===q.a?"":`${q.m} Q${q.n}${st.ans[i]===undefined?" (skipped)":""}`).filter(Boolean).join("; ")||"None";
+  f.elements.notes.value=Q.map((q,i)=>st.flag[i]?`${q.m} Q${q.n}${st.note[i]?": "+st.note[i]:" (flagged)"}`:"").filter(Boolean).join(" | ");
+  const b=$("wsub");b.disabled=true;b.textContent="Sending…";let ok=false;
+  try{const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()});ok=r.ok}catch(err){}
+  b.disabled=false;b.textContent="See my results";
+  if(ok)st.sent=sig();save();results();
+  $("rmsg").textContent=ok?`Result recorded for ${name} (${email}).`:"Your result could not be sent. Please show this screen to your administrator, or go back and finish again when you are online.";
+});
+function results(){
+  $("quiz").classList.add("hide");$("who").classList.add("hide");$("res").classList.remove("hide");$("rmsg").textContent=st.sent===sig()&&st.who?`Result recorded for ${st.who.name} (${st.who.email}).`:"";
+  const right=Q.filter((q,i)=>st.ans[i]===q.a).length,answered=Object.keys(st.ans).length;
+  $("score").textContent=Math.round(right/Q.length*100)+"%";
+  $("sline").textContent=`${right} of ${Q.length} correct · ${answered} answered · ${Object.values(st.flag).filter(Boolean).length} flagged`;
+  $("mods").innerHTML=S.map(([m])=>{const ix=Q.map((q,i)=>i).filter(i=>Q[i].m===m),r=ix.filter(i=>st.ans[i]===Q[i].a).length;
+    return `<div class="row"><span>${esc(m)}</span><div class="track"><i style="width:${r/ix.length*100}%"></i></div><b>${r} / ${ix.length}</b></div>`}).join("");
+  const items=Q.map((q,i)=>({q,i})).filter(({q,i})=>st.flag[i]||st.ans[i]!==q.a);
+  $("review").innerHTML=items.length?items.map(({q,i})=>{const a=st.ans[i];
+    const tags=(a===undefined?'<span class="tag" style="color:var(--mute)">Skipped</span>':a!==q.a?'<span class="tag" style="color:var(--bad)">Missed</span>':'')+(st.flag[i]?'<span class="tag" style="color:var(--flag)">Flagged</span>':'');
+    return `<div class="rv">${tags}<div class="t">${esc(q.m)} · ${q.n}. ${esc(q.t)}</div><div class="a">${a!==undefined?`Your answer: ${L[a]}. ${esc(q.o[a])}<br>`:""}Key: ${L[q.a]}. ${esc(q.o[q.a])}</div>${st.note[i]?`<div class="n">${esc(st.note[i])}</div>`:""}</div>`}).join(""):'<p>Nothing missed or flagged.</p>';
+  window.scrollTo(0,0);
+}
+$("opts").addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b||b.disabled)return;st.ans[st.cur]=+b.dataset.i;render()});
+$("grid").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.cur=+b.dataset.j;render()});
+$("prev").onclick=()=>{if(st.cur>0){st.cur--;render()}};
+$("next").onclick=()=>{if(st.cur<Q.length-1){st.cur++;render()}else finish()};
+$("flag").onclick=()=>{st.flag[st.cur]=!st.flag[st.cur];render();if(st.flag[st.cur])$("note").focus()};
+$("note").addEventListener("input",e=>{st.note[st.cur]=e.target.value;save()});
+$("instant").onchange=e=>{st.instant=e.target.checked;render()};
+$("finish").onclick=finish;
+$("back").onclick=()=>{$("res").classList.add("hide");$("quiz").classList.remove("hide");render()};
+const resetAll=()=>{st={cur:0,ans:{},flag:{},note:{},instant:st.instant};$("wf").reset();$("res").classList.add("hide");$("quiz").classList.remove("hide");render()};
+$("again").onclick=()=>{st.ans={};st.cur=0;st.sent=null;$("res").classList.add("hide");$("quiz").classList.remove("hide");render()};
+const rs=$("reset");let armed=false;rs.onclick=()=>{if(!armed){armed=true;rs.textContent="Tap again to clear answers & notes";setTimeout(()=>{armed=false;rs.textContent="Start over"},3000);return}armed=false;rs.textContent="Start over";resetAll()};
+$("copy").onclick=async()=>{const lines=Q.map((q,i)=>({q,i})).filter(({q,i})=>st.flag[i]||st.ans[i]!==q.a).map(({q,i})=>{const a=st.ans[i];
+  return `${q.m} Q${q.n}: ${q.t}\n  Key: ${L[q.a]}. ${q.o[q.a]}${a!==undefined&&a!==q.a?`\n  My answer: ${L[a]}. ${q.o[a]}`:""}${st.note[i]?`\n  Note: ${st.note[i]}`:""}`});
+  try{await navigator.clipboard.writeText(lines.join("\n\n")||"Nothing missed or flagged.");$("cmsg").textContent="Copied — paste it into the chat to critique."}catch(e){$("cmsg").textContent="Copy was blocked here — you can select the list below instead."}};
+document.addEventListener("keydown",e=>{if(e.target.tagName==="TEXTAREA"||$("quiz").classList.contains("hide"))return;
+  if(e.key==="ArrowRight")$("next").click();else if(e.key==="ArrowLeft")$("prev").click();
+  else{const k="abcd".indexOf(e.key.toLowerCase());if(k>-1&&k<Q[st.cur].o.length){const b=$("opts").children[k];if(!b.disabled)b.click()}}});
+render();
+}
+</script>
+</body>
+</html>
